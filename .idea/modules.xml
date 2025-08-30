@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/FileConverter.iml" filepath="$PROJECT_DIR$/.idea/FileConverter.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/VideoFileConverter.iml" filepath="$PROJECT_DIR$/.idea/VideoFileConverter.iml" />
     </modules>
   </component>
 </project>
