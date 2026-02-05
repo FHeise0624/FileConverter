@@ -58,5 +58,5 @@ def crawl_and_convert(root_dir):
                     print(f"Skipping lossless file: {full_path}")
 
 if __name__ == '__main__':
-    media_root = '/media/felix/server'  # Change to your root video directory
+    media_root = '/media/user/server'  # Change to your root video directory
     crawl_and_convert(media_root)
