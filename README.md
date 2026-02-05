@@ -1,5 +1,6 @@
-# FileConverter **v1.0.0 Pre-release** 
-[![Latest](https://img.shields.io/badge/release-v1.0.0-pre-orange?style=flat&logo=github)](https://github.com/FHeise0624/FileConverter/releases/latest)
+# FileConverter **v1.0.0** 
+[![Tag](https://img.shields.io/github/tag/FHeise0624/FileConverter)](https://github.com/FHeise0624/FileConverter/releases/latest)
+
 
 FileConverter scans directories recursively and converts video files to **H.264 lossless** for optimal **Jellyfin** streaming. Uses FFmpeg while preserving original quality.
 
