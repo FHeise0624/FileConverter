@@ -2,7 +2,7 @@
 
 FileConverter scans directories recursively and converts video files to **H.264 lossless** for optimal **Jellyfin** streaming. Uses FFmpeg while preserving original quality.
 
-**Current status**: Python + FFmpeg subprocess. Optimized for Windows/Linux media servers.
+**Current status**: Python + FFmpeg subprocess. Optimised for Windows/Linux media servers.
 
 **🚨 PRE-RELEASE NOTICE**: Edit `media_root` path (line ~70) before first run. v1.1.0 adds config file.
 
