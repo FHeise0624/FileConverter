@@ -31,8 +31,8 @@ FileConverter scans directories recursively and converts video files to **H.264 
 
 ## 🚀 Quick Start
 
-### Option 1. Download Pre-release
-[![Download v1.0.0](https://github.com/FHeise0624/FileConverter/releases/latest/download/fileconverter.py)]() 👈
+### Option 1: Download Pre-release
+[📥 Download fileconverter.py](https://github.com/FHeise0624/FileConverter/releases/latest) 👈
 
 ### Option 2: Git Clone
 1.  Git Clone
