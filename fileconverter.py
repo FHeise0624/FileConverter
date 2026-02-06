@@ -1,9 +1,9 @@
 import os
 import subprocess
+import config
+from multiprocessing import Pool
+from tqdm import tqdm
 
-VIDEO_EXTENSIONS = (
-    '.mkv', '.avi', '.mov', '.mp4', '.flv', '.wmv', '.ts', '.m2ts', '.mts'
-)
 
 def get_video_codec(file_path):
     """Get the video codec of the file using ffprobe"""
@@ -26,8 +26,7 @@ def is_lossless(file_path):
     if codec == 'ffv1':
         return True
     if codec == 'h264':
-        # Check for crf=0 with ffprobe is tricky; assume not lossless if h264
-        # So treat h264 as lossy unless known otherwise
+        # Treats h264 as lossy unless known otherwise
         return False
     return False
 
@@ -37,7 +36,7 @@ def convert_to_lossless(input_path):
     print(f"Converting\n  '{input_path}'\nto lossless\n  '{output_path}'")
     cmd = [
         'ffmpeg', '-i', input_path,
-        '-c:v', 'libx264', '-preset', 'veryslow', '-crf', '0',
+        '-c:v', 'libx264', '-preset', config.CONVERSION_SPEED, '-crf', '0',
         '-c:a', 'flac',
         output_path
     ]
@@ -47,16 +46,45 @@ def convert_to_lossless(input_path):
     except subprocess.CalledProcessError:
         print(f"Error converting {input_path}")
 
+def process_video(full_path):
+    """Worker function for multiprocessing - process single video"""
+    output_path = os.path.splitext(full_path)[0] + '_lossless.mkv'
+
+    if os.path.exists(output_path):
+        print(f"Exists already, skipping {output_path}")
+        return
+
+    if not is_lossless(full_path):
+        convert_to_lossless(full_path)
+    else:
+        print(f"Skipping lossless file: {full_path}")
+
 def crawl_and_convert(root_dir):
+    """Scanns through directory-structure and starts converison process"""
+    video_files = []
+    print(f"Scanning {root_dir} for video files...")
     for dirpath, _, files in os.walk(root_dir):
         for file in files:
-            if file.lower().endswith(VIDEO_EXTENSIONS):
+            if file.lower().endswith(config.VIDEO_EXTENSIONS):
                 full_path = os.path.join(dirpath, file)
-                if not is_lossless(full_path):
-                    convert_to_lossless(full_path)
-                else:
-                    print(f"Skipping lossless file: {full_path}")
+                video_files.append(full_path)
+
+    print(f"{len(video_files)} videos found.")
+
+    if not video_files:
+        print("No video files found.")
+        return
+
+    max_workers =  min(len(video_files), config.MAX_WORKERS or ((os.cpu_count() or 4) // 2)) #half CPU cores
+    print(f"Starting parallel conversion using {max_workers} workers...")
+
+    with Pool(processes=max_workers) as pool:
+        list(tqdm(pool.imap(process_video, video_files),
+                  total=len(video_files),
+                  desc="Converting Videos"))
+
+    print("🎉 All conversions completed!")
+
 
 if __name__ == '__main__':
-    media_root = '/media/user/server'  # Change to your root video directory
-    crawl_and_convert(media_root)
+    crawl_and_convert(config.MEDIA_ROOT)
