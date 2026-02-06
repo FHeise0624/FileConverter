@@ -75,7 +75,9 @@ def crawl_and_convert(root_dir):
     print(f"Starting parallel conversion using {max_workers} workers...")
 
     with Pool(processes=max_workers) as pool:
-        pool.map(process_video, video_files)
+        list(tqdm(pool.imap(process_video, video_files),
+                  total=len(video_files),
+                  desc="Converting Videos"))
 
     print("🎉 All conversions completed!")
 
